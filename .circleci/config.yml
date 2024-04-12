@@ -59,12 +59,14 @@ jobs:
       - run:
           name: Push image to Docker Hub
           command: |
-            docker tag myimage:latest $DOCKER_USERNAME/myimage:latest
-            docker push $DOCKER_USERNAME/myimage:latest  
+            echo "Docker ID and Image: $DOCKER_IMAGE_NAME"
+            docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
+            docker tag $DOCKER_IMAGE_NAME $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID
+            docker push $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID 
 workflows:
   default:
     jobs:
       - test-build
-    #   - build-docker:
-    #       requires:
-    #         - test-build
+      - build-docker:
+          requires:
+            - test-build
