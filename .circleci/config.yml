@@ -49,10 +49,10 @@ jobs:
 
       # Build Docker image
       - run:
-        name: Install Docker
-        command: |
-          sudo yum update -y
-          sudo yum install -y docker
+          name: Install Docker
+          command: |
+            sudo yum update -y
+            sudo yum install -y docker
 
     # Start Docker service
       - run:
