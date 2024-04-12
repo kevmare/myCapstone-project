@@ -56,9 +56,9 @@ jobs:
 
     # Start Docker service
       - run:
-        name: Start Docker service
-        command: |
-          sudo service docker start
+          name: Start Docker service
+          command: |
+            sudo service docker start
       - run:
           name: Build Docker image
           command: |
