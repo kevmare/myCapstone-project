@@ -48,20 +48,22 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build -t capstone_project:latest .
+            docker build --tag=$DOCKER_IMAGE_NAME .
+            docker image ls
 
       # Authenticate with Docker Hub
       - run:
           name: Login to Docker Hub
           command: |
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            echo "Docker ID and Image: $DOCKER_IMAGE_NAME"
+            docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
 
       # Push Docker image to Docker Hub
       - run:
           name: Push image to Docker Hub
           command: |
             echo "Docker ID and Image: $DOCKER_IMAGE_NAME"
-            docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
+            
             docker tag $DOCKER_IMAGE_NAME $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID:0:7
             docker push $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID 
 workflows:
