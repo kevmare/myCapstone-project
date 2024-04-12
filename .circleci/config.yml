@@ -55,6 +55,7 @@ jobs:
             echo "Error: curl is not installed. Please install curl and try again."
             exit 1
             fi
+            which curl
             curl -fsSL https://get.docker.com -o get-docker.sh
             sudo sh get-docker.sh
 
