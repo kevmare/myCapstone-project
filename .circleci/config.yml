@@ -51,6 +51,10 @@ jobs:
       - run:
           name: Install Docker
           command: |
+            if ! command -v curl &> /dev/null; then
+            echo "Error: curl is not installed. Please install curl and try again."
+            exit 1
+            fi
             curl -fsSL https://get.docker.com -o get-docker.sh
             sudo sh get-docker.sh
 
