@@ -203,7 +203,7 @@ workflows:
             branches:
               only: [main]
       - create-eks-cluster:
-          requires: [test-build, build-docker,d eploy-network-infrastructure]
+          requires: [test-build, build-docker, deploy-network-infrastructure]
           filters:
             branches:
               only: [main]
