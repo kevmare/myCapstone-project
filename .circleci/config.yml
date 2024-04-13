@@ -1,5 +1,30 @@
 version: 2.1
 
+commands:
+
+  Install_eksctl:
+    description: install eksctl latest
+    steps:
+      - run:
+          name: Install dependencies
+          command: |
+            sudo --update --no-cache tar gzip
+      - run:
+          name: install eksctl latest
+          command: |
+            curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
+            tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$(uname -s)_amd64.tar.gz
+            sudo mv /tmp/eksctl /usr/local/bin
+
+  install-awscli:
+    description: Install AWS CLI
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
 jobs:
   test-build:
     docker:
@@ -117,7 +142,54 @@ jobs:
             echo "VPC = ${VPC}"
             echo "Public-Subnet-1 = ${PUBLIC_SUBNET_1}"
             echo "Public-Subnet-2 = ${PUBLIC_SUBNET_2}"
+  create-eks-cluster: 
+    docker:
+      - image: python:3.7.3-stretch
 
+    steps:
+      - checkout
+      - install-awscli
+      #- Install_eksctl
+      - run:
+          name: Install kubectl
+          
+          command: |
+            export VPC=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='VPC'].OutputValue" --output text)
+            export PUBLIC_SUBNET_1=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1'].OutputValue" --output text)
+            export PUBLIC_SUBNET_2=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2'].OutputValue" --output text)
+            echo "VPC = ${VPC}"
+            echo "Public-Subnet-1 = ${PUBLIC_SUBNET_1}"
+            echo "Public-Subnet-2 = ${PUBLIC_SUBNET_2}"
+            
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+            kubectl version --short --client
+            kubectl get svc
+      - run:
+          name: Create EKS Cluster
+          working_directory: ./cloudformation
+          command: |
+            aws cloudformation deploy \
+              --template-file cloudformation/eks-cluster.yml \
+              --tags project=${ENVIRONMENT_NAME}-project \
+              --stack-name "${ENVIRONMENT_NAME}-eks-cluster" \
+              --region ${AWS_DEFAULT_REGION} \
+              --capabilities CAPABILITY_NAMED_IAM
+              
+          no_output_timeout: 15m
+      - run:
+          name: Create Node Groups
+          working_directory: ./cloudformation
+          command: |
+            aws cloudformation deploy \
+              --template-file cloudformation/nodegroups.yml \
+              --tags project=${ENVIRONMENT_NAME}-project \
+              --stack-name "${ENVIRONMENT_NAME}-eks-nodegroups" \
+              --region ${AWS_DEFAULT_REGION} \
+              # --parameter-overrides file://cloudformation/nodegroups-parameters.json \
+              --capabilities CAPABILITY_NAMED_IAM
 workflows:
   default:
     jobs:
@@ -127,6 +199,11 @@ workflows:
             - test-build
       - deploy-network-infrastructure:
           requires: [test-build, build-docker]
+          filters:
+            branches:
+              only: [main]
+      - create-eks-cluster:
+          requires: [test-build, build-docker,d eploy-network-infrastructure]
           filters:
             branches:
               only: [main]

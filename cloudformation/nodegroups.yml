@@ -1,0 +1,80 @@
+Parameters:
+  EnvironmentName:
+    Description: An Environment name that will be prefixed to resources
+    Default: Capstone-Project
+    Type: String
+
+  MinSize:
+    Description: Minimum number of web application servers
+    Default: 2
+    Type: String
+
+  MaxSize:
+    Description: Maximum number of web application servers
+    Default: 4
+    Type: String
+
+  DesiredSize:
+    Description: How many instances should be created.
+    Default: 4
+    Type: Number
+
+  KeyPairName:
+    Description: The EC2 Key Pair to allow SSH access to the instances
+    Default: capstonekey
+    Type: AWS::EC2::KeyPair::KeyName
+    
+Resources:
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref InstanceGroupRole
+
+  InstanceGroupRole:
+    Type: AWS::IAM::Role
+    Properties:
+    RoleName: !Sub ${EnvironmentName}-nodegroup-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly    
+
+  NodeSecurityGroup:
+    Type: AWS::EKS::Nodegroup
+    Properties:
+      ClusterName: !Sub ${EnvironmentName}-cluster
+      NodeRole: !GetAtt InstanceGroupRole.Arn
+      NodegroupName: !Sub ${EnvironmentName}-nodegroup
+      ScalingConfig:
+        MinSize: !Ref MinSize
+        MaxSize: !Ref MaxSize
+        DesiredSize: !Ref DesiredSize
+      Subnets:
+        Fn::Split:
+          - ","
+          - Fn::ImportValue:
+              Fn::Sub: ${EnvironmentName}-PUB-NETS
+
+Outputs:
+  NodeInstanceRole:
+    Description: The node instance role
+    Value: !GetAtt InstanceGroupRole.Arn
+    Export:
+      Name: !Sub ${EnvironmentName}-IR
+  NodeGroup:
+    Description: The node group for EKS
+    Value: !Ref NodeGroup
+    Export:
+      Name: !Sub ${EnvironmentName}-NG

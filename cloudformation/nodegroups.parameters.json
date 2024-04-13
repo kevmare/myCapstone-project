@@ -1,0 +1,22 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "Capstone-Project"
+  },
+  {
+    "ParameterKey": "KeyPairName",
+    "ParameterValue": "capstonekey"
+  },
+  {
+    "ParameterKey": "MinSize",
+    "ParameterValue": "2"
+  },
+  {
+    "ParameterKey": "MaxSize",
+    "ParameterValue": "4"
+  },
+  {
+    "ParameterKey": "DesiredSize",
+    "ParameterValue": "4"
+  }
+]
