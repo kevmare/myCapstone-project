@@ -116,15 +116,15 @@ Resources:
             SubnetId: !Ref PublicSubnet2
     
     NodesSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Cluster sec for nodes
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0      
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: Cluster sec for nodes
+            VpcId: !Ref VPC
+            SecurityGroupIngress:
+                - IpProtocol: tcp
+                  FromPort: 80
+                  ToPort: 80
+                  CidrIp: 0.0.0.0/0      
             
 Outputs: 
     
@@ -147,10 +147,10 @@ Outputs:
           Name: !Sub ${EnvironmentName}-PUB-NETS
           
     SecurityGroup:
-    Description: Security group for the cluster control plane communication with worker nodes
-    Value: !Ref NodesSecurityGroup
-    Export:
-      Name: !Sub ${EnvironmentName}-SCG
+        Description: Security group for the cluster control plane communication with worker nodes
+        Value: !Ref NodesSecurityGroup
+        Export:
+        Name: !Sub ${EnvironmentName}-SCG
 
     PublicSubnet1:
         Description: A reference to the public subnet in the 1st Availability Zone
