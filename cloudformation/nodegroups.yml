@@ -75,6 +75,6 @@ Outputs:
       Name: !Sub ${EnvironmentName}-IR
   NodeGroup:
     Description: The node group for EKS
-    Value: !Ref NodeGroup
+    Value: !Ref NodeSecurityGroup
     Export:
       Name: !Sub ${EnvironmentName}-NG
