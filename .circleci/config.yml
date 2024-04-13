@@ -135,15 +135,15 @@ jobs:
             aws cloudformation deploy \
               --template-file network.yml \
               --tags project=capstone_project-${CIRCLE_WORKFLOW_ID:0:5} \
-              --stack-name network-capstone-project \
+              --stack-name network-My-Capstone \
               --no-fail-on-empty-changeset  
       - run:
           name: Extract InfraComponents
           working_directory: ./cloudformation
           command: |
-            export VPC=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='VPC'].OutputValue" --output text)
-            export PUBLIC_SUBNET_1=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1'].OutputValue" --output text)
-            export PUBLIC_SUBNET_2=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2'].OutputValue" --output text)
+            export VPC=$(aws cloudformation describe-stacks --stack-name network-My-Capstone --query "Stacks[0].Outputs[?OutputKey=='VPC'].OutputValue" --output text)
+            export PUBLIC_SUBNET_1=$(aws cloudformation describe-stacks --stack-name network-My-Capstone --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1'].OutputValue" --output text)
+            export PUBLIC_SUBNET_2=$(aws cloudformation describe-stacks --stack-name network-My-Capstone --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2'].OutputValue" --output text)
             echo "VPC = ${VPC}"
             echo "Public-Subnet-1 = ${PUBLIC_SUBNET_1}"
             echo "Public-Subnet-2 = ${PUBLIC_SUBNET_2}"
@@ -160,7 +160,7 @@ jobs:
           command: | 
             aws eks list-clusters --region us-east-1 --output text > cluster.txt
             cat cluster.txt
-            if grep -q "Capstone-Project-cluster" cluster.txt
+            if grep -q "My-Capstone-cluster" cluster.txt
             then
               echo "the cluster already exist"
               circleci-agent step halt
@@ -172,9 +172,9 @@ jobs:
           name: Install kubectl
           
           command: |
-            export VPC=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='VPC'].OutputValue" --output text)
-            export PUBLIC_SUBNET_1=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1'].OutputValue" --output text)
-            export PUBLIC_SUBNET_2=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2'].OutputValue" --output text)
+            export VPC=$(aws cloudformation describe-stacks --stack-name network-My-Capstone --query "Stacks[0].Outputs[?OutputKey=='VPC'].OutputValue" --output text)
+            export PUBLIC_SUBNET_1=$(aws cloudformation describe-stacks --stack-name network-My-Capstone --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1'].OutputValue" --output text)
+            export PUBLIC_SUBNET_2=$(aws cloudformation describe-stacks --stack-name network-My-Capstone --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2'].OutputValue" --output text)
             echo "VPC = ${VPC}"
             echo "Public-Subnet-1 = ${PUBLIC_SUBNET_1}"
             echo "Public-Subnet-2 = ${PUBLIC_SUBNET_2}"
@@ -233,9 +233,9 @@ jobs:
       - run:
           name: Update kubectl
           command: |
-            aws eks --region us-east-1 update-kubeconfig --name Capstone-Project-cluster
+            aws eks --region us-east-1 update-kubeconfig --name My-Capstone-cluster
             # echo '---------------------Describe Clusters------------------------------------'
-            # aws eks describe-cluster --name Capstone-Project-cluster
+            # aws eks describe-cluster --name My-Capstone-cluster
       - run:
           name: kubectl deploy
           working_directory: ./cloudformation
