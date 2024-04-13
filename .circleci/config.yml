@@ -214,6 +214,58 @@ jobs:
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://nodegroups-parameters.json \
               --capabilities CAPABILITY_NAMED_IAM
+  deploy-image: 
+    docker:
+      - image: python:3.7
+    steps:
+      - checkout
+      - - install-awscli
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       pip install envsubst    
+      - run:
+          name: Update kubectl
+          command: |
+            aws eks --region us-east-1 update-kubeconfig --name Capstone-Project-cluster
+            echo '---------------------Describe Clusters------------------------------------'
+            aws eks describe-cluster --name Capstone-Project-cluster
+      - run:
+          name: kubectl deploy
+          working_directory: ./cloudformation
+          command: |
+            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+            kubectl version --short --client
+            export DOCKER_IMAGE="{$DOCKERHUB_USERNAME}/capstone-project:ver-${CIRCLE_WORKFLOW_ID:0:5}"
+            echo "Docker-Image = ${DOCKER_IMAGE}"
+            
+            echo ${ENVIRONMENT_NAME}
+            echo ${AWS_DEFAULT_REGION}
+            aws cloudformation deploy \
+              --template-file deploy.yml \
+              --tags project=${ENVIRONMENT_NAME}-project \
+              --stack-name "${ENVIRONMENT_NAME}-capsttone-deployment" \
+              --region ${AWS_DEFAULT_REGION} \
+              # --parameter-overrides file://nodegroups-parameters.json \
+              --capabilities CAPABILITY_NAMED_IAM
+              
+            kubectl get deployments
+      - run:
+          name: Check kubernetes configuration
+          command: |
+            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+            kubectl version --short --client
+            kubectl get pods -o wide
+            kubectl get nodes -o wide
+      
+      #Destroy infrastructure when fail
+      #- eks-cluster-destroy  
 workflows:
   default:
     jobs:
