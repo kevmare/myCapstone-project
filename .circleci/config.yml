@@ -40,13 +40,14 @@ jobs:
             make lint 
   build-docker:
     docker:
-      - image: python:3.7
+      - image: circleci/golang:1.15
       
     working_directory: ~/app
     
     steps:
       - checkout
       - setup_remote_docker
+          version: version: 19.03.13
 
       # Build Docker image
     #   - run:
@@ -68,7 +69,6 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker --version
             docker build --tag=$DOCKER_IMAGE_NAME .
             docker image ls
 
