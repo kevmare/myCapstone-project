@@ -31,13 +31,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kevmare/capstone_project
+  name: capstone-project
   labels:
-    app: kevmare/capstone_project
+    app: capstone-project
 spec:
   type: LoadBalancer
   selector:
-    app: kevmare/capstone_project
+    app: capstone-project
   ports:
     - port: 80
       targetPort: 80
