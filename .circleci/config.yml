@@ -126,7 +126,7 @@ workflows:
           requires:
             - test-build
       - deploy-network-infrastructure:
-          requires: [test-build, sbuild-docker]
+          requires: [test-build, build-docker]
           filters:
             branches:
               only: [main]
