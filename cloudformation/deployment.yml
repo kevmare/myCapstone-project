@@ -23,7 +23,7 @@ spec:
       containers:
         - image: kevmare/capstone_project:ver-9672a
           imagePullPolicy: Always
-          name: capstone_project
+          name: my-capstone
           ports:
             - containerPort: 80
 
