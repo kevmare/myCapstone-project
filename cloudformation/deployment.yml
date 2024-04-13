@@ -13,7 +13,7 @@ spec:
         app: my-capstone
     spec:
       containers:
-      - name: udacity-capstone
+      - name: my-capstone
         image: $DOCKER_IMAGE
         imagePullPolicy: Always
         ports:
