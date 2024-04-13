@@ -89,6 +89,35 @@ jobs:
             echo "Docker ID and Image: $dockerpath" 
             docker image tag capstone_project:ver-${CIRCLE_WORKFLOW_ID:0:5} $dockerpath
             docker push $dockerpath
+  deploy-network-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      #installing tar - mandatory for creating workspaces in aws-cli image
+      - run:
+          name: Install dependencies 
+          command: yum install -y tar gzip 
+      - run:
+          name: Create Network Infra
+          working_directory: ./cloudformation
+          command: |
+            aws cloudformation deploy \
+              --template-file network.yml \
+              --tags project=capstone_project-${CIRCLE_WORKFLOW_ID:0:5} \
+              --stack-name network-capstone-project \
+              --no-fail-on-empty-changeset  
+      - run:
+          name: Extract InfraComponents
+          working_directory: ./cloudformation
+          command: |
+            export VPC=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='VPC'].OutputValue" --output text)
+            export PUBLIC_SUBNET_1=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1'].OutputValue" --output text)
+            export PUBLIC_SUBNET_2=$(aws cloudformation describe-stacks --stack-name network-capstone-project --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2'].OutputValue" --output text)
+            echo "VPC = ${VPC}"
+            echo "Public-Subnet-1 = ${PUBLIC_SUBNET_1}"
+            echo "Public-Subnet-2 = ${PUBLIC_SUBNET_2}"
+
 workflows:
   default:
     jobs:
@@ -96,3 +125,8 @@ workflows:
       - build-docker:
           requires:
             - test-build
+      - deploy-network-infrastructure:
+          requires: [test-build, sbuild-docker]
+          filters:
+            branches:
+              only: [main]
