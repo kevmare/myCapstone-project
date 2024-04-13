@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: capstone_project
+  name: capstone-project
   labels:
-    app: capstone_project
+    app: capstone-project
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: capstone_project
+      app: capstone-project
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,12 +18,12 @@ spec:
   template:
     metadata:
       labels:
-        app: capstone_project
+        app: capstone-project
     spec:
       containers:
         - image: kevmare/capstone_project
           imagePullPolicy: Always
-          name: capstone_project
+          name: capstone-project
           ports:
             - containerPort: 80
 
@@ -31,13 +31,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: capstone_project
+  name: capstone-project
   labels:
-    app: capstone_project
+    app: capstone-project
 spec:
   type: LoadBalancer
   selector:
-    app: capstone_project
+    app: capstone-project
   ports:
     - port: 80
       targetPort: 80
