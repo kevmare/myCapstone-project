@@ -203,6 +203,8 @@ jobs:
           name: Create Node Groups
           working_directory: ./cloudformation
           command: |
+            echo ${ENVIRONMENT_NAME}
+            echo ${AWS_DEFAULT_REGION}
             aws cloudformation deploy \
               --template-file cloudformation/nodegroups.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
