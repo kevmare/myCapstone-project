@@ -194,9 +194,10 @@ jobs:
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-cluster" \
               --region ${AWS_DEFAULT_REGION} \
+              --parameter-overrides file://cloudformation/nodegroups-parameters.json \
               --capabilities CAPABILITY_NAMED_IAM
               
-              kubectl get svc
+              #kubectl get svc
           no_output_timeout: 15m
       - run:
           name: Create Node Groups
@@ -207,7 +208,7 @@ jobs:
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-nodegroups" \
               --region ${AWS_DEFAULT_REGION} \
-              # --parameter-overrides file://cloudformation/nodegroups-parameters.json \
+              --parameter-overrides file://cloudformation/nodegroups-parameters.json \
               --capabilities CAPABILITY_NAMED_IAM
 workflows:
   default:
