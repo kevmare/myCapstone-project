@@ -220,19 +220,16 @@ jobs:
     steps:
       - checkout
       - install-awscli
-       - run:
-          name: Install dependencies
-          command: |
-            pip install envsubst 
+       
       - add_ssh_keys:
           fingerprints:
             - "SHA256:mAIVG1YpfMTlcRpvI9rtvsG+sp/Ev4+0rj9TLwm79cE"
       - attach_workspace:
           at: ~/
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       pip install envsubst    
+      - run:
+          name: Install dependencies
+          command: |
+            pip install envsubst    
       - run:
           name: Update kubectl
           command: |
