@@ -187,7 +187,7 @@ jobs:
             
       - run:
           name: Create EKS Cluster
-          working_directory: ./cloudformation
+          working_directory: ./cloudformation 
           command: |
             echo ${ENVIRONMENT_NAME}
             echo ${AWS_DEFAULT_REGION}
@@ -196,7 +196,7 @@ jobs:
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-cluster" \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/nodegroups-parameters.json \
+              --parameter-overrides file://nodegroups-parameters.json \
               --capabilities CAPABILITY_NAMED_IAM
               
               #kubectl get svc
