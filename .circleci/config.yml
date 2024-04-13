@@ -2,19 +2,19 @@ version: 2.1
 
 commands:
 
-  Install_eksctl:
-    description: install eksctl latest
-    steps:
-      - run:
-          name: Install dependencies
-          command: |
-            sudo --update --no-cache tar gzip
-      - run:
-          name: install eksctl latest
-          command: |
-            curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
-            tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$(uname -s)_amd64.tar.gz
-            sudo mv /tmp/eksctl /usr/local/bin
+  # Install_eksctl:
+  #   description: install eksctl latest
+  #   steps:
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           sudo --update --no-cache tar gzip
+  #     - run:
+  #         name: install eksctl latest
+  #         command: |
+  #           curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
+  #           tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$(uname -s)_amd64.tar.gz
+  #           sudo mv /tmp/eksctl /usr/local/bin
 
   install-awscli:
     description: Install AWS CLI
