@@ -216,10 +216,10 @@ jobs:
               --capabilities CAPABILITY_NAMED_IAM
   deploy-image: 
     docker:
-      - image: python:3.7
+      - image: python:3.7.3-stretch
     steps:
       - checkout
-      - - install-awscli
+      - install-awscli
       # - run:
       #     name: Install dependencies
       #     command: |
