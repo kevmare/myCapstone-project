@@ -189,6 +189,8 @@ jobs:
           name: Create EKS Cluster
           working_directory: ./cloudformation
           command: |
+            echo ${ENVIRONMENT_NAME}
+            echo ${AWS_DEFAULT_REGION}
             aws cloudformation deploy \
               --template-file cloudformation/eks-cluster.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
