@@ -256,7 +256,7 @@ jobs:
             #   --region ${AWS_DEFAULT_REGION} \
             #   # --parameter-overrides file://nodegroups-parameters.json \
             #   --capabilities CAPABILITY_NAMED_IAM
-            kubectl apply -f deployment.yaml
+            kubectl apply -f deployment.yml
               
             kubectl get deployments
       - run:
