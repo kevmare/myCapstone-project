@@ -192,7 +192,7 @@ jobs:
             echo ${ENVIRONMENT_NAME}
             echo ${AWS_DEFAULT_REGION}
             aws cloudformation deploy \
-              --template-file cloudformation/eks-cluster.yml \
+              --template-file eks-cluster.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-cluster" \
               --region ${AWS_DEFAULT_REGION} \
@@ -208,11 +208,11 @@ jobs:
             echo ${ENVIRONMENT_NAME}
             echo ${AWS_DEFAULT_REGION}
             aws cloudformation deploy \
-              --template-file cloudformation/nodegroups.yml \
+              --template-file nodegroups.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-nodegroups" \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/nodegroups-parameters.json \
+              --parameter-overrides file://nodegroups-parameters.json \
               --capabilities CAPABILITY_NAMED_IAM
 workflows:
   default:
