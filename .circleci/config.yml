@@ -155,6 +155,19 @@ jobs:
       - checkout
       - install-awscli
       #- Install_eksctl
+      # - run:
+      #     name: check if cluster exist
+      #     command: | 
+      #       aws eks list-clusters --region us-east-1 --output text > cluster.txt
+      #       cat cluster.txt
+      #       if grep -q "Capstone-Project-cluster" cluster.txt
+      #       then
+      #         echo "the cluster already exist"
+      #         circleci-agent step halt
+      #         exit 0
+      #       else
+      #         echo "the cluster doesn't exits"
+      #       fi
       - run:
           name: Install kubectl
           
