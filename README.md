@@ -12,5 +12,16 @@
 
 Lint to github - `https://github.com/kevmare/myCapstone-project`
 
+## Prerequisites
+- AWS account
+- Circleci account
+- Docker Hub account
+- Install and configure the necessary plugins : aws, git, docker, kubectl, eksctl, minikube
 
+## Link to webApp
+`http://a39c824ec16ba43f2809dd4a8e2bdc1e-2088161717.us-east-1.elb.amazonaws.com/`
+
+## Test Web App
+
+![alt text](https://github.com/kevmare/myCapstone-project/blob/main/screenshots/Web-app.png?raw=true)
 
