@@ -6,7 +6,7 @@ jobs:
       # Use the same Docker base as the project
       - image: python:3.7.3-stretch
 
-    working_directory: ~/repo
+    working_directory: ~/app
 
     steps:
       - checkout
@@ -42,28 +42,28 @@ jobs:
     docker:
       - image: python:3.7
       
-    working_directory: ~/repo
+    working_directory: ~/app
     
     steps:
       - checkout
 
       # Build Docker image
-      - run:
-          name: Install Docker
-          command: |
-            if ! command -v curl &> /dev/null; then
-            echo "Error: curl is not installed. Please install curl and try again."
-            exit 1
-            fi
-            which curl
-            curl -fsSL https://get.docker.com -o get-docker.sh
-            sudo sh get-docker.sh
+    #   - run:
+    #       name: Install Docker
+    #       command: |
+    #         if ! command -v curl &> /dev/null; then
+    #         echo "Error: curl is not installed. Please install curl and try again."
+    #         exit 1
+    #         fi
+    #         which curl
+    #         curl -fsSL https://get.docker.com -o get-docker.sh
+    #         sudo sh get-docker.sh
 
-    # Start Docker service
-      - run:
-          name: Start Docker service
-          command: |
-            sudo service docker start
+    # # Start Docker service
+    #   - run:
+    #       name: Start Docker service
+    #       command: |
+    #         sudo service docker start
       - run:
           name: Build Docker image
           command: |
