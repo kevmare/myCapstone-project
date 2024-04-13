@@ -257,6 +257,7 @@ jobs:
             #   # --parameter-overrides file://nodegroups-parameters.json \
             #   --capabilities CAPABILITY_NAMED_IAM
             kubectl apply -f deployment.yml
+            kubectl apply -f load-balancer.yml
               
             kubectl get deployments
       - run:
