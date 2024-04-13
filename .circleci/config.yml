@@ -1,5 +1,10 @@
 version: 2.1
 
+orbs:
+  kubernetes: circleci/kubernetes@1.3.1
+  aws-cli: circleci/aws-cli@3.1.3
+  aws-eks: circleci/aws-eks@2.2.0
+
 commands:
 
   # Install_eksctl:
@@ -160,8 +165,8 @@ jobs:
             echo "VPC = ${VPC}"
             echo "Public-Subnet-1 = ${PUBLIC_SUBNET_1}"
             echo "Public-Subnet-2 = ${PUBLIC_SUBNET_2}"
-            
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+            # curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             chmod +x ./kubectl
             mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
             echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
