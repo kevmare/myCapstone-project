@@ -242,7 +242,7 @@ jobs:
           command: |
             aws eks --region us-east-1 update-kubeconfig --name My-Capstone-cluster
             # echo '---------------------Describe Clusters------------------------------------'
-            # aws eks describe-cluster --name My-Capstone-cluster
+            aws eks describe-cluster --name My-Capstone-cluster
       - run:
           name: kubectl deploy
           working_directory: ./cloudformation
@@ -255,7 +255,7 @@ jobs:
             export DOCKER_IMAGE="kevmare/capstone_project:ver-${CIRCLE_WORKFLOW_ID:0:5}"
             echo "Docker-Image = ${DOCKER_IMAGE}"
             
-            envsubst < deployment.yml | kubectl apply -f deployment.yml
+            envsubst < deployment.yml | kubectl apply -f -
             kubectl apply -f load-balancer.yml
               
             kubectl get deployments

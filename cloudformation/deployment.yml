@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-capstone
-        image: $DOCKER_IMAGE
+        image: kevmare/capstone_project:ver-${CIRCLE_WORKFLOW_ID:0:5}:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
