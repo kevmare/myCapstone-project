@@ -21,7 +21,7 @@ spec:
         app: my-capstone
     spec:
       containers:
-        - image: kevmare/capstone_project:ver-9672a
+        - image: kevmare/capstone_project:latest
           imagePullPolicy: Always
           name: my-capstone
           ports:
