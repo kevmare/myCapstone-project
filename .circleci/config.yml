@@ -244,7 +244,7 @@ jobs:
             mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
             echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
             kubectl version --short --client
-            export DOCKER_IMAGE="{$DOCKERHUB_USERNAME}/capstone-project:ver-${CIRCLE_WORKFLOW_ID:0:5}"
+            export DOCKER_IMAGE={$DOCKERHUB_USERNAME}/capstone-project:ver-${CIRCLE_WORKFLOW_ID:0:5}"
             echo "Docker-Image = ${DOCKER_IMAGE}"
             
             # echo ${ENVIRONMENT_NAME}
@@ -252,7 +252,7 @@ jobs:
             # aws cloudformation deploy \
             #   --template-file deployment.yml \
             #   --tags project=${ENVIRONMENT_NAME}-project \
-            #   --stack-name "${ENVIRONMENT_NAME}-capsttone-deployment" \
+            #   --stack-name ${ENVIRONMENT_NAME}-capsttone-deployment" \
             #   --region ${AWS_DEFAULT_REGION} \
             #   # --parameter-overrides file://nodegroups-parameters.json \
             #   --capabilities CAPABILITY_NAMED_IAM
