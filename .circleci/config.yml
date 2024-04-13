@@ -283,3 +283,8 @@ workflows:
           filters:
             branches:
               only: [main]
+      - deploy-image:
+          requires: [test-build, build-docker, deploy-network-infrastructure, create-eks-cluster]
+          filters:
+            branches:
+              only: [main]
