@@ -46,6 +46,7 @@ jobs:
     
     steps:
       - checkout
+      - setup_remote_docker
 
       # Build Docker image
     #   - run:
