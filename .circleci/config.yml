@@ -83,10 +83,12 @@ jobs:
       - run:
           name: Push image to Docker Hub
           command: |
-            echo "Docker ID and Image: $DOCKER_IMAGE_NAME"
-            
-            docker tag $DOCKER_IMAGE_NAME $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID:0:7
-            docker push $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID 
+            docker run -d -p 8000:80 --name capstone capstone_project:ver-${CIRCLE_WORKFLOW_ID:0:5}
+            docker ps
+            dockerpath=$DOCKERHUB_USERNAME/capstone_project:ver-${CIRCLE_WORKFLOW_ID:0:5}
+            echo "Docker ID and Image: $dockerpath" 
+            docker image tag capstone_project:ver-${CIRCLE_WORKFLOW_ID:0:5} $dockerpath
+            docker push $dockerpath
 workflows:
   default:
     jobs:
