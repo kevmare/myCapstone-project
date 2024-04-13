@@ -184,7 +184,7 @@ jobs:
             mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
             echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
             kubectl version --short --client
-            kubectl get svc
+            
       - run:
           name: Create EKS Cluster
           working_directory: ./cloudformation
@@ -196,6 +196,7 @@ jobs:
               --region ${AWS_DEFAULT_REGION} \
               --capabilities CAPABILITY_NAMED_IAM
               
+              kubectl get svc
           no_output_timeout: 15m
       - run:
           name: Create Node Groups
